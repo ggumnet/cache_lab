@@ -24,7 +24,7 @@ void transpose_submit(int M, int N, int A[N][M], int B[M][N])
 {
     int blockRow, blockCol;
     int row, col;
-    int t0, t1;
+    int t0, t1, t2,t3,t4,t5,t6,t7;
 
     if(M==32 && N==32){
         for(blockRow=0; blockRow<M; blockRow+=8){
@@ -49,38 +49,23 @@ void transpose_submit(int M, int N, int A[N][M], int B[M][N])
         for(blockRow=0; blockRow<M; blockRow+=8){
             for(blockCol=0; blockCol<N; blockCol+=8){
                 for(row=0; row<8; row++){
-                    for(col=0; col<8; col++){
-                        if(row<4){
-                            if(row==col){
-                                t0 = A[blockRow+row][blockCol+col];
-                            }
-                            else if(row+4==col){
-                                t1 = A[blockRow+row][blockCol+col];
-                            }
-                            else{
-                                B[blockCol+col][blockRow+row] = A[blockRow+row][blockCol+col];
-                            }
-                        }
-                        else{
-                            if(row-4==col){
-                                t0 = A[blockRow+row][blockCol+col];
-                            }
-                            else if(row==col){
-                                t1 = A[blockRow+row][blockCol+col];
-                            }
-                            else{
-                                B[blockCol+col][blockRow+row] = A[blockRow+row][blockCol+col];
-                            }
-                        }
-                    }
-                    if(row<4){
-                        B[blockCol+row][blockRow+row] = t0;
-                        B[blockCol+row+4][blockRow+row] = t1;
-                    }
-                    else{
-                        B[blockCol+row-4][blockRow+row] = t0;
-                        B[blockCol+row][blockRow+row] = t1;
-                    }
+                    t0 = A[blockRow+row][blockCol+0];
+                    t1 = A[blockRow+row][blockCol+1];
+                    t2 = A[blockRow+row][blockCol+2];
+                    t3 = A[blockRow+row][blockCol+3];
+                    t4 = A[blockRow+row][blockCol+4];
+                    t5 = A[blockRow+row][blockCol+5];
+                    t6 = A[blockRow+row][blockCol+6];
+                    t7 = A[blockRow+row][blockCol+7];              
+
+                    B[blockCol+0][blockRow+row] = t0;
+                    B[blockCol+1][blockRow+row] = t1;
+                    B[blockCol+2][blockRow+row] = t2;
+                    B[blockCol+3][blockRow+row] = t3;
+                    B[blockCol+4][blockRow+row] = t4;
+                    B[blockCol+5][blockRow+row] = t5;
+                    B[blockCol+6][blockRow+row] = t6;
+                    B[blockCol+7][blockRow+row] = t7;
                 }
             }
         }
